@@ -273,7 +273,7 @@ status_t AudioHardwareALSA::initCheck()
         return NO_INIT;
 
     if (!mMixer || !mMixer->isValid())
-    	LOGW("ALSA Mixer is not valid. AudioFlinger will do software volume control.");
+        LOGW("ALSA Mixer is not valid. AudioFlinger will do software volume control.");
 
     return NO_ERROR;
 }

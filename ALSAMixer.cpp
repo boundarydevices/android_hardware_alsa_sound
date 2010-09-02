@@ -129,7 +129,7 @@ ALSAMixer::ALSAMixer(const char *sndcard)
 
     for (int i = 0; i <= SND_PCM_STREAM_LAST; i++) {
 
-    	if (!mMixer[i]) continue;
+        if (!mMixer[i]) continue;
 
         mixer_info_t *info = mixerMasterProp[i].mInfo = new mixer_info_t;
 
