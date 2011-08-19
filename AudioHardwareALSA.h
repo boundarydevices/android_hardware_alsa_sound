@@ -53,6 +53,9 @@ struct alsa_handle_t {
     unsigned int        bufferSize;      // Size of sample buffer
     void *              modPrivate;
     int                 mmap; // mmap flags
+    const char *        devName;
+    alsa_handle_t *     handle_1;        //Modem Handle
+    alsa_handle_t *     handle_2;        //BT Handle
 };
 
 typedef List<alsa_handle_t> ALSAHandleList;
