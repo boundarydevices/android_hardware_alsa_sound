@@ -86,7 +86,7 @@ ssize_t AudioStreamOutALSA::write(const void *buffer, size_t bytes)
 
     snd_pcm_sframes_t n;
     size_t            sent = 0;
-    status_t          err;
+    status_t          err  = 0;
 
     do {
         if (mHandle->mmap)
@@ -98,15 +98,32 @@ ssize_t AudioStreamOutALSA::write(const void *buffer, size_t bytes)
                                (char *)buffer + sent,
                                snd_pcm_bytes_to_frames(mHandle->handle, bytes - sent));
         if (n == -EBADFD) {
-            // Somehow the stream is in a bad state. The driver probably
-            // has a bug and snd_pcm_recover() doesn't seem to handle this.
-            mHandle->module->open(mHandle, mHandle->curDev, mHandle->curMode);
+            LOGW("badstate and do recovery.....");
+            switch(snd_pcm_state(mHandle->handle)){
+                case SND_PCM_STATE_SETUP:
+                    err = snd_pcm_prepare(mHandle->handle);
+                    if(err < 0) LOGW("snd_pcm_prepare failed");
+                    break;
+                case SND_PCM_STATE_SUSPENDED:
+                    snd_pcm_resume(mHandle->handle);
+                    if(err < 0) LOGW("snd_pcm_resume failed");
+                    snd_pcm_prepare(mHandle->handle);
+                    if(err < 0) LOGW("snd_pcm_prepare failed");
+                    break;
+                default:
+                    // Somehow the stream is in a bad state. The driver probably
+                    // has a bug and snd_pcm_recover() doesn't seem to handle this.
+                    mHandle->module->open(mHandle, mHandle->curDev, mHandle->curMode);
+                    break;
+            }
+
+            if(err < 0 ) mHandle->module->open(mHandle, mHandle->curDev, mHandle->curMode);
 
             if (aDev && aDev->recover) aDev->recover(aDev, n);
         }
         else if (n < 0) {
             if (mHandle->handle) {
-		LOGW("underrun and do recovery.....");
+                LOGW("underrun and do recovery.....");
                 // snd_pcm_recover() will return 0 if successful in recovering from
                 // an error, or -errno if the error was unrecoverable.
                 n = snd_pcm_recover(mHandle->handle, n, 1);
