@@ -32,8 +32,14 @@
 #include <hardware_legacy/power.h>
 
 #include "AudioHardwareALSA.h"
+#ifdef  BOARD_IS_SABRELITE
+#define SGTL5000 "sgtl5000-audio"
+#define SPDIF    "imx-hdmi-soc"
+#else
 #define SGTL5000 "imx-3stack"
 #define SPDIF    "imx-3stack-spdif"
+#endif
+
 #define MAXCARDSNUM  2
 
 extern "C"

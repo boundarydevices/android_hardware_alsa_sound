@@ -40,6 +40,10 @@ ifeq ($(strip $(BOARD_USES_ALSA_AUDIO)),true)
     libc
 
   LOCAL_MODULE_TAGS := eng
+
+ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),SABRELITE)
+  LOCAL_CFLAGS += -DBOARD_IS_SABRELITE
+endif
   include $(BUILD_SHARED_LIBRARY)
 
 # This is the ALSA audio policy manager
