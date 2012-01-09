@@ -14,6 +14,7 @@
  ** See the License for the specific language governing permissions and
  ** limitations under the License.
  */
+/* Copyright 2010-2012 Freescale Semiconductor, Inc. */
 
 #include <errno.h>
 #include <stdarg.h>
@@ -396,15 +397,13 @@ AudioHardwareALSA::openInputStream(uint32_t devices,
         if (it->devices & devices) {
             err = mALSADevice->open(&(*it), devices, mode());
             if (err) break;
-/*
-            if (devices & AudioSystem::DEVICE_OUT_WIRED_HDMI){
+            if (devices & AudioSystem::DEVICE_OUT_AUX_DIGITAL){
                 strcpy(mCurCard ,SPDIF);
                 mMixer = mMixerSpdif;
             } else {
-*/
                 strcpy(mCurCard,SGTL5000);
                 mMixer = mMixerSgtl5000;
- //           }
+            }
 
             in = new AudioStreamInALSA(this, &(*it), acoustics);
             //set the format, channels, sampleRate to 0, so that it can make use of
