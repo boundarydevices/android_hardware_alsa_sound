@@ -15,7 +15,7 @@
  ** limitations under the License.
  */
 
-/* Copyright 2010-2011 Freescale Semiconductor Inc. */
+/* Copyright 2010-2012 Freescale Semiconductor, Inc. */
 
 #ifndef ANDROID_AUDIO_HARDWARE_ALSA_H
 #define ANDROID_AUDIO_HARDWARE_ALSA_H
@@ -55,6 +55,9 @@ struct alsa_handle_t {
     unsigned int        bufferSize;      // Size of sample buffer
     void *              modPrivate;
     int                 mmap; // mmap flags
+    const char *        devName;
+    alsa_handle_t *     handle_1;        //Modem Handle
+    alsa_handle_t *     handle_2;        //BT Handle
 };
 
 typedef android::List<struct alsa_handle_t> ALSAHandleList;
