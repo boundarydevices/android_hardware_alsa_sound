@@ -37,8 +37,8 @@
 #define SGTL5000 "sgtl5000-audio"
 #define SPDIF    "imx-hdmi-soc"
 #else
-#define SGTL5000 "imx-3stack"
-#define SPDIF    "imx-3stack-spdif"
+#define SGTL5000 "sgtl5000-audio"
+#define SPDIF    "imx-spdif"
 #endif
 
 #define MAXCARDSNUM  2
