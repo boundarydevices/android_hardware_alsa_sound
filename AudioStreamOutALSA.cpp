@@ -87,7 +87,7 @@ ssize_t AudioStreamOutALSA::write(const void *buffer, size_t bytes)
 
     snd_pcm_sframes_t n;
     size_t            sent = 0;
-    status_t          err;
+    status_t          err = 0;
 
     do {
         if (mHandle->mmap)
